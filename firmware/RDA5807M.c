@@ -1,15 +1,12 @@
 #include "RDA5807M.h"
 
 unsigned short radioRegisterContent[4];
-unsigned char buffer[10];
 int volume;
 int frequence;
 
 void radioInit(void){
 	unsigned char radioAddress;
-		
-	UartInit();
-	
+			
 	//Scan for device
 	radioAddress = I2C_Scan();
 	

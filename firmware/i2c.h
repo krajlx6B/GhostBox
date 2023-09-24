@@ -1,4 +1,5 @@
 #include "15W408AS.h"
+#include "utils.h"
 
 #define SDA P24
 #define SCL P25
@@ -15,6 +16,3 @@ unsigned char I2C_ReadByte();
 unsigned char I2C_WriteByte(unsigned char dat);
 unsigned char I2C_Scan();
 
-void delay1us(void);
-void delay_us(unsigned int value);
-void delay_ms(unsigned int value);

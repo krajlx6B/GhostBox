@@ -1,0 +1,93 @@
+{
+  "name": "GhostBox_v0.",
+  "type": "C51",
+  "dependenceList": [],
+  "srcDirs": [],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": [
+      {
+        "name": "Source Group 1",
+        "files": [
+          {
+            "path": "74HC595.c"
+          },
+          {
+            "path": "74HC595.h"
+          },
+          {
+            "path": "i2c.c"
+          },
+          {
+            "path": "i2c.h"
+          },
+          {
+            "path": "main.c"
+          },
+          {
+            "path": "main.h"
+          },
+          {
+            "path": "RDA5807M.c"
+          },
+          {
+            "path": "RDA5807M.h"
+          },
+          {
+            "path": "USART.c"
+          },
+          {
+            "path": "USART.h"
+          },
+          {
+            "path": "utils.c"
+          },
+          {
+            "path": "utils.h"
+          }
+        ],
+        "folders": []
+      }
+    ]
+  },
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "miscInfo": {
+    "uid": "242c5b19bc30ae1d5145d8a169f11443"
+  },
+  "targets": {
+    "Target 1": {
+      "excludeList": [],
+      "toolchain": "Keil_C51",
+      "compileConfig": {
+        "options": "null"
+      },
+      "uploader": "stcgal",
+      "uploadConfig": {
+        "bin": "",
+        "eepromImgPath": "null",
+        "extraOptions": "-t 18432",
+        "options": ".eide/stc.flash.json"
+      },
+      "uploadConfigMap": {
+        "Custom": {
+          "bin": "",
+          "commandLine": "",
+          "eraseChipCommand": ""
+        }
+      },
+      "custom_dep": {
+        "name": "default",
+        "incList": [
+          "../../../../../../../Keil_v5/C51/INC/STC"
+        ],
+        "libList": [],
+        "sourceDirList": [],
+        "defineList": []
+      }
+    }
+  },
+  "version": "3.3"
+}

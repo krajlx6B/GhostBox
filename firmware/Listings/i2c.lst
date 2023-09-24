@@ -1,0 +1,154 @@
+C51 COMPILER V9.60.7.0   I2C                                                               09/24/2023 20:34:43 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\Objects\i2c.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE i2c.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\i2c.l
+                    -st) TABS(2) OBJECT(.\Objects\i2c.obj)
+
+line level    source
+
+   1          #include "i2c.h"
+   2          
+   3          bit deviceFound = 0; // Flag to indicate if a device is found
+   4          
+   5          // Function to generate a start condition
+   6          void I2C_Start() {
+   7   1          SDA = 1;
+   8   1          delay_us(I2C_DELAY_US);
+   9   1          SCL = 1;
+  10   1          delay_us(I2C_DELAY_US); // Add a delay for stability
+  11   1          SDA = 0;
+  12   1          delay_us(I2C_DELAY_US); // Add a delay for stability
+  13   1          SCL = 0;
+  14   1          delay_us(I2C_DELAY_US);
+  15   1      }
+  16          
+  17          // Function to generate a stop condition
+  18          void I2C_Stop() {
+  19   1          SDA = 0;
+  20   1          delay_us(I2C_DELAY_US);
+  21   1          SCL = 1;
+  22   1          delay_us(I2C_DELAY_US); // Add a delay for stability
+  23   1          SDA = 1;
+  24   1          delay_us(I2C_DELAY_US); // Add a delay for stability
+  25   1      }
+  26          
+  27          void I2C_send_ack() {
+  28   1          SDA = 0;  // Pull SDA low to send ACK
+  29   1          delay_us(I2C_DELAY_US);
+  30   1          SCL = 1;  // Generate a clock pulse
+  31   1          delay_us(I2C_DELAY_US);
+  32   1          // Add a small delay here if needed for timing requirements
+  33   1          SCL = 0;  // Bring the clock line back low
+  34   1          delay_us(I2C_DELAY_US);
+  35   1          SDA = 1;  // Release SDA
+  36   1          delay_us(I2C_DELAY_US);
+  37   1      }
+  38          
+  39          void I2C_send_nack() {
+  40   1          SDA = 1;  // Release SDA (high) to send NACK
+  41   1          delay_us(I2C_DELAY_US);
+  42   1          SCL = 1;  // Generate a clock pulse
+  43   1          delay_us(I2C_DELAY_US);
+  44   1          // Add a small delay here if needed for timing requirements
+  45   1          SCL = 0;  // Bring the clock line back low
+  46   1          delay_us(I2C_DELAY_US);
+  47   1      }
+  48          
+  49          // Function to receive a byte
+  50          unsigned char I2C_ReadByte() {
+  51   1          unsigned char i, dat = 0;
+  52   1        
+  53   1          SDA = 1; // Release data line
+  54   1        
+C51 COMPILER V9.60.7.0   I2C                                                               09/24/2023 20:34:43 PAGE 2   
+
+  55   1          for (i = 0; i < 8; i++) {
+  56   2              dat <<= 1;     // Shift left
+  57   2              SCL = 1;        // Clock high
+  58   2              delay_us(I2C_DELAY_US);        // Add a delay for stability
+  59   2              if (SDA) dat |= 0x01; // Read the bit
+  60   2              SCL = 0;        // Clock low
+  61   2              delay_us(I2C_DELAY_US);  
+  62   2          }
+  63   1          return dat;
+  64   1      }
+  65          
+  66          unsigned char I2C_WriteByte(unsigned char dat) {
+  67   1          unsigned char i;
+  68   1          for (i = 0; i < 8; i++) {
+  69   2              SDA = dat & 0x80;
+  70   2              dat <<= 1;
+  71   2              SCL = 1;
+  72   2              delay_us(I2C_DELAY_US);  
+  73   2              SCL = 0;
+  74   2              delay_us(I2C_DELAY_US);  
+  75   2          }
+  76   1          SDA = 1;
+  77   1          delay_us(I2C_DELAY_US);  
+  78   1          SCL = 1;
+  79   1          delay_us(I2C_DELAY_US);  
+  80   1          if (SDA) {
+  81   2              SCL = 0;
+  82   2              delay_us(I2C_DELAY_US);  
+  83   2              return 1; // NACK received
+  84   2          } else {
+  85   2              SCL = 0;
+  86   2              delay_us(I2C_DELAY_US);  
+  87   2              return 0; // ACK received
+  88   2          }
+  89   1      }
+  90          
+  91          unsigned char I2C_Scan() {
+  92   1        unsigned char address;
+  93   1        unsigned char ack;
+  94   1      
+  95   1        for(address = 1; address < 128; address++){
+  96   2          I2C_Start();
+  97   2          ack = I2C_WriteByte(address << 1);
+  98   2          I2C_Stop();
+  99   2        
+ 100   2          if (ack == 0) return address;
+ 101   2        }
+ 102   1        return 0; // Return TRUE if a device is found, otherwise FALSE
+ 103   1      }
+ 104          
+ 105          //Delays
+ 106          void delay1us(void) //@18.432MHz
+ 107          {
+ 108   1        unsigned char data i;
+ 109   1      
+ 110   1        i = 2;
+ 111   1        while (--i);
+ 112   1      }
+ 113          
+ 114          void delay_us(unsigned int value){
+ 115   1        unsigned int i;
+ 116   1        for (i = 0; i < value; i++) {
+C51 COMPILER V9.60.7.0   I2C                                                               09/24/2023 20:34:43 PAGE 3   
+
+ 117   2            delay1us();
+ 118   2        }
+ 119   1      }
+ 120          
+ 121          void delay_ms(unsigned int value){ 
+ 122   1        while(value > 0){
+ 123   2          --value;
+ 124   2          delay_us(1000);
+ 125   2        }
+ 126   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    284    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

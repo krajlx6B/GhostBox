@@ -9,5 +9,4 @@
 void UartInit(void);
 void SendChar(unsigned char dat);
 void SendString(char *s);
-void SendFloat(float num);
 void PrintSerial(const char *format, ...);

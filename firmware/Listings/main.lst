@@ -1,0 +1,89 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              09/24/2023 20:34:43 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "main.h"
+   2          
+   3          void main(void){
+   4   1        int ghostMode;
+   5   1        int delayms;
+   6   1      
+   7   1        ghostMode = 0;
+   8   1        delayms = 50;
+   9   1      
+  10   1        radioInit();
+  11   1      
+  12   1        while(1){   
+  13   2          //Key control
+  14   2          if(SW_VOL_UP == 0) {
+  15   3            setVolumeUp();      
+  16   3            delay_ms(100);
+  17   3            PrintSerial("Volume %i\n", getVolume());
+  18   3      
+  19   3          }
+  20   2          if(SW_VOL_DOWN == 0) {
+  21   3            setVolumeDown();
+  22   3            delay_ms(100);
+  23   3            PrintSerial("Volume %i\n", getVolume());
+  24   3          }
+  25   2          if(SW_SEEK_UP == 0) {
+  26   3            seekUp();
+  27   3            delay_ms(1000);
+  28   3            PrintSerial("Station %i\n", getFreq());
+  29   3          }
+  30   2          if(SW_SEEK_DOWN == 0) {
+  31   3            seekDown();
+  32   3            delay_ms(1000);
+  33   3            PrintSerial("Station %i\n", getFreq());
+  34   3          }
+  35   2          if(SW_MODE == 0) {
+  36   3            ghostMode = 1;
+  37   3            delay_ms(100);
+  38   3          }
+  39   2            
+  40   2          if(ghostMode == 1) {  
+  41   3            ghostSeek();
+  42   3            delay_ms(delayms);
+  43   3      
+  44   3            if(SW_DELAY == 0) {
+  45   4              if(delayms == 300) delayms = 50;
+  46   4              else delayms = delayms + 50;
+  47   4      
+  48   4              PrintSerial("Delay %i\n", delayms);
+  49   4      
+  50   4              delay_ms(100);
+  51   4              
+  52   4      
+  53   4            }
+  54   3            
+C51 COMPILER V9.60.7.0   MAIN                                                              09/24/2023 20:34:43 PAGE 2   
+
+  55   3            if(SW_MODE == 0) {
+  56   4              ghostMode = 0;
+  57   4              break;
+  58   4            } 
+  59   3              
+  60   3            
+  61   3          }   
+  62   2        }
+  63   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    232    ----
+   CONSTANT SIZE    =     33    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

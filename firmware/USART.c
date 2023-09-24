@@ -67,16 +67,6 @@ void SendString(char *s) {
     }
 }
 
-void SendFloat(float num) {
-    int a,b;
-    a = (int)num;
-    b = (int)((num-a)*10);
-    SendChar((unsigned char)(a+48));
-    SendChar('.');
-    SendChar((unsigned char)(b+48));
-    SendChar('\n');
-}
-
 void PrintSerial(const char *format, ...) {
     int i;
     char buffer[30]; 

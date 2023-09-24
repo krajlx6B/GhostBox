@@ -1,0 +1,8 @@
+".\Objects\i2c.obj",
+".\Objects\main.obj",
+".\Objects\RDA5807M.obj",
+".\Objects\USART.obj",
+".\Objects\utils.obj" 
+TO ".\Objects\GhostBox_v0.1" 
+PRINT(".\Listings\GhostBox_v0.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 
