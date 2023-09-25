@@ -16,8 +16,8 @@ void radioInit(void){
 	
 		readRegisters();
 
-		PrintSerial("Radio found at 0x%02x\n", radioAddress);
-		PrintSerial("Loading defaults...\n");
+		//PrintSerial("Radio found at 0x%02x\n", radioAddress);
+		//PrintSerial("Loading defaults...\n");
 
 		radioRegisterContent[0] = 0xD001; 				//Power up and set Audio output, Mute and Bass boost
 		radioRegisterContent[2] = RADIO_REG_R4_EM50; 	//Set de emphasis
@@ -25,7 +25,7 @@ void radioInit(void){
 		setVolume(RADIO_DEFAULT_VOL); 					//Set default volume
 		setFreq(RADIO_DEFAULT_FRQ); 					//Set default freq
 
-	} else PrintSerial("Device not found\n" );
+	} //else PrintSerial("Device not found\n" );
 }
 
 unsigned short readRegisterRan(unsigned char regAddress){
@@ -92,7 +92,7 @@ void setFreq(unsigned short freq) {
 	newChan += 0x0010; //Add the tune bit to 1
 	radioRegisterContent[1] = newChan;
 	writeRegisters();
-	PrintSerial("Station %i\n", getFreq());
+	//PrintSerial("Station %i\n", getFreq());
 }
 
 unsigned short getFreq(void) {

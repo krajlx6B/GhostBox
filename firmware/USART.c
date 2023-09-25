@@ -68,13 +68,13 @@ void SendString(char *s) {
 }
 
 void PrintSerial(const char *format, ...) {
-    int i;
+    unsigned char i;
     char buffer[30]; 
 
     va_list args;
     va_start(args, format);
 
-    for (i = 0; i < 30; i++) buffer[i] = '\0'; 
+    for(i = 0; i < 30; i++) buffer[i] = '\0'; 
 
     vsprintf(buffer, format, args);
     va_end(args);

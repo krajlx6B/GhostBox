@@ -1,6 +1,7 @@
 #include "15W408AS.h"
 #include "utils.h"
 #include "USART.h"
+#include "RDA5807M.h"
 
 #define DS P32
 #define STCP P33
@@ -12,8 +13,11 @@
 #define W4 P20
 
 void shiftOut(unsigned char dataa);
-void displayDigit(unsigned short digit, unsigned char display);
+
+void displayFreq();
+void displayVol();
+void displayDelay(unsigned char value);
 
 void ledInit();
 
-unsigned char convert2Hex(int value);
+unsigned char convert2Hex(char value);

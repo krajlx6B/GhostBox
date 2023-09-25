@@ -14,46 +14,120 @@ void shiftOut(unsigned char dataa) {
     STCP = 0;
 }
 
-void displayDigit(unsigned short digit, unsigned char display) {
-    unsigned int value;
-    unsigned char valueHex;
+void displayFreq() {
+    unsigned char i;
+    unsigned int freq;
+    char value;
 
-    value = (int) digit / 10;
+    freq = (int) getFreq() / 10;
 
-    switch (display)
-    {
-    case 3:
-        value = value / 1000;
-        if(value == 0) valueHex = convert2Hex(-1);
-        else valueHex = convert2Hex(value);
-        break;
-    case 2:
-        value = value / 100;
-        value = value % 10;
-        valueHex = convert2Hex(value);
-        break;
-    case 1:
-        value = value / 10;
-        value = value % 10;
-        valueHex = convert2Hex(value);
-        break;
-    case 0:
-        value = value % 10;
-        valueHex = convert2Hex(value);
-        break;    
-    default:
-        break;
+    for(i=0;i<4;i++){
+        switch (i)
+        {
+        case 3:
+            value = freq / 1000;
+            if(value == 0) value = -1;
+            break;
+        case 2:
+            value = freq / 100;
+            value = value % 10;
+            break;
+        case 1:
+            value = freq / 10;
+            value = value % 10;
+            break;
+        case 0:
+            value = freq % 10;
+            break;    
+        default:
+            break;
+        }
+
+        // Enable the appropriate display
+        W1 = (i == 0) ? 0 : 1;
+        W2 = (i == 1) ? 0 : 1;
+        W3 = (i == 2) ? 0 : 1;
+        W4 = (i == 3) ? 0 : 1;
+
+        //shiftOut(valueHex);
+        shiftOut(convert2Hex(value));
+        delay_ms(1);
     }
+}
 
-    // Enable the appropriate display
-    W1 = (display == 0) ? 0 : 1;
-    W2 = (display == 1) ? 0 : 1;
-    W3 = (display == 2) ? 0 : 1;
-    W4 = (display == 3) ? 0 : 1;
+void displayVol() {
+    unsigned char i;
+    unsigned int vol;
+    char value;
 
-    //shiftOut(digitPatterns[digit]);
-    shiftOut(valueHex);
-    delay_us(50);
+    vol = (unsigned int) getVolume();
+
+    for(i=0;i<4;i++) {
+        switch (i)
+        {
+        case 3:
+            value = -2;
+            break;
+        case 2:
+            value = -1;
+            break;
+        case 1:
+            value = vol / 10;
+            //value = value % 10;
+            break;
+        case 0:
+            value = vol % 10;
+            break;    
+        default:
+            break;
+        }
+
+        // Enable the appropriate display
+        W1 = (i == 0) ? 0 : 1;
+        W2 = (i == 1) ? 0 : 1;
+        W3 = (i == 2) ? 0 : 1;
+        W4 = (i == 3) ? 0 : 1;
+
+        shiftOut(convert2Hex(value));
+        delay_ms(1);
+    }
+}
+
+void displayDelay(unsigned char delay){
+    unsigned char i;
+    char value;
+
+    value = delay;
+
+    for(i=0;i<4;i++) {
+        switch (i)
+        {
+        case 3:
+            value = -3;
+            break;
+        case 2:
+            value = delay / 100;
+            break;
+        case 1:
+            value = delay / 10;
+            value = value % 10;
+            break;
+        case 0:
+            value = delay % 10;
+            break;    
+        default:
+            break;
+        }
+
+        // Enable the appropriate display
+        W1 = (i == 0) ? 0 : 1;
+        W2 = (i == 1) ? 0 : 1;
+        W3 = (i == 2) ? 0 : 1;
+        W4 = (i == 3) ? 0 : 1;
+
+        shiftOut(convert2Hex(value));
+        delay_ms(1);
+    }
 }
 
 void ledInit() {
@@ -68,57 +142,51 @@ void ledInit() {
     W4 = 0;
 }
 
-unsigned char convert2Hex(int value){
+unsigned char convert2Hex(char value){
     unsigned char valueHex;
 
-    // 7-segment display digit patterns (common anode)
-    //    0xC0, // 0
-    //    0xF9, // 1
-    //    0xA4, // 2
-    //    0xB0, // 3
-    //    0x99, // 4
-    //    0x92, // 5
-    //    0x82, // 6
-    //    0xF8, // 7
-    //    0x80, // 8
-    //    0x90  // 9
-
     switch (value) {
+    case -3:
+        valueHex = 0xA1;    //d
+        break;
+    case -2:
+        valueHex = 0xC1;    //v
+        break;
     case -1:
-        valueHex = 0xFF;
+        valueHex = 0xFF;    //null
         break;
     case 0:
-        valueHex = 0xC0;
+        valueHex = 0xC0;    //0
         break;
     case 1:
-        valueHex = 0xF9;
+        valueHex = 0xF9;    //1
         break;
     case 2:
-        valueHex = 0xA4;
+        valueHex = 0xA4;    //2
         break;
     case 3:
-        valueHex = 0xB0;
+        valueHex = 0xB0;    //3
         break;
     case 4:
-        valueHex = 0x99;
+        valueHex = 0x99;    //4
         break;
     case 5:
-        valueHex = 0x92;
+        valueHex = 0x92;    //5
         break;
     case 6:
-        valueHex = 0x82;
+        valueHex = 0x82;    //6
         break;
     case 7:
-        valueHex = 0xF8;
+        valueHex = 0xF8;    //7
         break;
     case 8:
-        valueHex = 0x80;
+        valueHex = 0x80;    //8
         break;
     case 9:
-        valueHex = 0x90;
+        valueHex = 0x90;    //9
         break;
     default:
-        valueHex = 0x00;
+        valueHex = 0x00;    //all
         break;
     }
     return valueHex;
