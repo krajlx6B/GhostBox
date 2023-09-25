@@ -24,7 +24,8 @@ void displayDigit(unsigned short digit, unsigned char display) {
     {
     case 3:
         value = value / 1000;
-        valueHex = convert2Hex(value);
+        if(value == 0) valueHex = convert2Hex(-1);
+        else valueHex = convert2Hex(value);
         break;
     case 2:
         value = value / 100;
@@ -83,6 +84,9 @@ unsigned char convert2Hex(int value){
     //    0x90  // 9
 
     switch (value) {
+    case -1:
+        valueHex = 0xFF;
+        break;
     case 0:
         valueHex = 0xC0;
         break;
@@ -114,7 +118,7 @@ unsigned char convert2Hex(int value){
         valueHex = 0x90;
         break;
     default:
-        valueHex = 0xC0;
+        valueHex = 0x00;
         break;
     }
     return valueHex;
